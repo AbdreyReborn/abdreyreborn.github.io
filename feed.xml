@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>ruHaskell</title>
+        <link>http://ruhaskell.org</link>
+        <description><![CDATA[Русскоязычное сообщество Haskell-разработчиков]]></description>
+        <atom:link href="http://ruhaskell.org/feed.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>Fri, 13 Feb 2015 00:00:00 UT</lastBuildDate>
+        <item>
+    <title>Базовая работа с MVar</title>
+    <link>http://ruhaskell.org/posts/theory/2015/02/13/mvars.html</link>
+    <description><![CDATA[В данном посте произведен краткий обзор MVar, API, примеров использования.]]></description>
+    <pubDate>Fri, 13 Feb 2015 00:00:00 UT</pubDate>
+    <guid>http://ruhaskell.org/posts/theory/2015/02/13/mvars.html</guid>
+</item>
+<item>
+    <title>Yesod и Haste: мёд и дёготь</title>
+    <link>http://ruhaskell.org/posts/web/2015/02/05/yesod-haste-honey-tar.html</link>
+    <description><![CDATA[Yesod и Haste - стоит ли игра свеч?]]></description>
+    <pubDate>Thu, 05 Feb 2015 00:00:00 UT</pubDate>
+    <guid>http://ruhaskell.org/posts/web/2015/02/05/yesod-haste-honey-tar.html</guid>
+</item>
+<item>
+    <title>Aeson: Hello World!</title>
+    <link>http://ruhaskell.org/posts/packages/2015/02/03/aeson-hello-world.html</link>
+    <description><![CDATA[Сегодня подружимся с JSON и познакомимся с пакетом aeson.]]></description>
+    <pubDate>Tue, 03 Feb 2015 00:00:00 UT</pubDate>
+    <guid>http://ruhaskell.org/posts/packages/2015/02/03/aeson-hello-world.html</guid>
+</item>
+<item>
+    <title>Реализация реляционной алгебры</title>
+    <link>http://ruhaskell.org/posts/typesystem/2015/01/30/relational-algebra.html</link>
+    <description><![CDATA[Пост описывает возможности построения реляционных отношений и базовых операций над ними.]]></description>
+    <pubDate>Fri, 30 Jan 2015 00:00:00 UT</pubDate>
+    <guid>http://ruhaskell.org/posts/typesystem/2015/01/30/relational-algebra.html</guid>
+</item>
+<item>
+    <title>Линзы: Real World</title>
+    <link>http://ruhaskell.org/posts/packages/2015/01/28/lenses-real-world.html</link>
+    <description><![CDATA[Продолжаем изучать линзы, а именно пакет fclabels.]]></description>
+    <pubDate>Wed, 28 Jan 2015 00:00:00 UT</pubDate>
+    <guid>http://ruhaskell.org/posts/packages/2015/01/28/lenses-real-world.html</guid>
+</item>
+<item>
+    <title>Линзы: Hello World!</title>
+    <link>http://ruhaskell.org/posts/packages/2015/01/23/lenses-hello-world.html</link>
+    <description><![CDATA[Введение в линзы. Только для новичков, опытным хаскелистам не читать!]]></description>
+    <pubDate>Fri, 23 Jan 2015 00:00:00 UT</pubDate>
+    <guid>http://ruhaskell.org/posts/packages/2015/01/23/lenses-hello-world.html</guid>
+</item>
+<item>
+    <title>Знакомство с Threepenny-GUI</title>
+    <link>http://ruhaskell.org/posts/gui/2015/01/22/threepenny.html</link>
+    <description><![CDATA[Демонстрация создания простого GUI на основе Threepenny-GUI и Reactive Banana]]></description>
+    <pubDate>Thu, 22 Jan 2015 00:00:00 UT</pubDate>
+    <guid>http://ruhaskell.org/posts/gui/2015/01/22/threepenny.html</guid>
+</item>
+<item>
+    <title>Начало проекта на Elm</title>
+    <link>http://ruhaskell.org/posts/elm/2015/01/22/elm-hello.html</link>
+    <description><![CDATA[Hello, FRP world!]]></description>
+    <pubDate>Thu, 22 Jan 2015 00:00:00 UT</pubDate>
+    <guid>http://ruhaskell.org/posts/elm/2015/01/22/elm-hello.html</guid>
+</item>
+<item>
+    <title>Работа с конфигурационными файлами в Haskell</title>
+    <link>http://ruhaskell.org/posts/packages/2015/01/21/configurator.html</link>
+    <description><![CDATA[Ни одно достаточно крупное приложение не обходится без конфигурационных файлов. Познакомимся с конфигуратором.]]></description>
+    <pubDate>Wed, 21 Jan 2015 00:00:00 UT</pubDate>
+    <guid>http://ruhaskell.org/posts/packages/2015/01/21/configurator.html</guid>
+</item>
+<item>
+    <title>Что такое монады: заблуждение из мира Haskell</title>
+    <link>http://ruhaskell.org/posts/theory/2015/01/20/the-what-are-monads-fallacy.html</link>
+    <description><![CDATA[В Haskell-сообществе существует проблема с монадами. Попробуем понять.]]></description>
+    <pubDate>Tue, 20 Jan 2015 00:00:00 UT</pubDate>
+    <guid>http://ruhaskell.org/posts/theory/2015/01/20/the-what-are-monads-fallacy.html</guid>
+</item>
+
+    </channel> 
+</rss>
