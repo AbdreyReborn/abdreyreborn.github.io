@@ -27,10 +27,12 @@ import Hakyll
 
 -- Код данной функции для формирования простой ссылки взят из исходников Hakyll.
 simpleRenderLink :: String 
-                 -> Maybe FilePath
+                 -> (Maybe FilePath) 
                  -> Maybe H.Html
-simpleRenderLink tag = fmap $ \filePath -> -- Формируем тег <a href...>
-    H.a ! A.href (toValue $ toUrl filePath) $ toHtml tag
+simpleRenderLink _   Nothing         = Nothing
+simpleRenderLink tag (Just filePath) =
+    -- Формируем тег <a href...>
+    Just $ H.a ! A.href (toValue $ toUrl filePath) $ toHtml tag
 
 -- Превращает имя автора в ссылку, ведущую к списку статей данного автора.
 authorField :: String -> Tags -> Context a
@@ -38,12 +40,15 @@ authorField = tagsFieldWith getNameOfAuthor simpleRenderLink (mconcat . interspe
 
 -- Оборачиваем ссылку-тег в программерские кавычки, чтобы было как в Haskell-коде. ;-)
 simpleRenderQuottedLink :: String 
-                        -> Maybe FilePath
+                        -> (Maybe FilePath) 
                         -> Maybe H.Html
-simpleRenderQuottedLink tag = fmap $ \filePath -> -- Формируем тег <a href...>
+simpleRenderQuottedLink _   Nothing         = Nothing
+simpleRenderQuottedLink tag (Just filePath) =
+    -- Формируем тег <a href...>
     let rawHref = H.a ! A.href (toValue $ toUrl filePath) $ toHtml tag
         quote = toHtml ("\"" :: String)
-    in quote >> rawHref >> quote
+    in
+    Just $ quote >> rawHref >> quote 
 
 -- Превращает имя ссылки в ссылку, ведущую к списку статей данного автора.
 quottedTagField :: String 
@@ -53,10 +58,12 @@ quottedTagField = tagsFieldWith getTags simpleRenderQuottedLink (mconcat . inter
 
 -- Формируем ссылку, конвертируя "родное файловое" имя категории в русскоязычный аналог...
 simpleRenderLinkForRussianCategory :: String 
-                                   -> Maybe FilePath
+                                   -> (Maybe FilePath) 
                                    -> Maybe H.Html
-simpleRenderLinkForRussianCategory tag = fmap $ \filePath ->
-    H.a ! A.href (toValue $ toUrl filePath) $ toHtml (getRussianNameOfCategory tag)
+simpleRenderLinkForRussianCategory _   Nothing         = Nothing
+simpleRenderLinkForRussianCategory tag (Just filePath) =
+    -- Формируем тег <a href...>
+    Just $ H.a ! A.href (toValue $ toUrl filePath) $ toHtml (getRussianNameOfCategory tag)
 
 -- Код данной функции, извлекающей имя категории из файлового пути, взят из исходников Hakyll.
 getCategory :: MonadMetadata m => Identifier -> m [String]
@@ -70,12 +77,12 @@ categoryFieldInRussian = tagsFieldWith getCategory simpleRenderLinkForRussianCat
 -- Остальные поля типа TimeLocale инициализированы пустыми значениями.
 ruTimeLocale :: TimeLocale
 ruTimeLocale =  TimeLocale { wDays  = []
-                           , months = [("января",   "jan"),  ("февраля", "feb"),
-                                       ("марта",    "mar"),  ("апреля",  "apr"),
-                                       ("мая",      "may"),  ("июня",    "jun"),
-                                       ("июля",     "jul"),  ("августа", "aug"),
-                                       ("сентября", "sep"),  ("октября", "oct"),
-                                       ("ноября",   "nov"),  ("декабря", "dec")]
+                           , months = [("января",   "янв"),  ("февраля", "фев"),
+                                       ("марта",    "мар"),  ("апреля",  "апр"),
+                                       ("мая",      "мая"),  ("июня",    "июн"),
+                                       ("июля",     "июл"),  ("августа", "авг"),
+                                       ("сентября", "сент"), ("октября", "окт"),
+                                       ("ноября",   "нояб"), ("декабря", "дек")]
                            , intervals = []
                            , amPm = ("", "")
                            , dateTimeFmt = "" 
@@ -88,8 +95,7 @@ ruTimeLocale =  TimeLocale { wDays  = []
 postContext :: TagsAndAuthors -> Context String
 postContext tagsAndAuthors = mconcat [ constField "host" aHost
                                      , dateFieldWith ruTimeLocale "date" "%d %B %Y"
-                                     , dateFieldWith ruTimeLocale "haskellDate" "%Y %b %d"
-                                     , quottedTagField "postTags" $ head tagsAndAuthors
+                                     , quottedTagField "postTags" $ tagsAndAuthors !! 0
                                      , categoryFieldInRussian "postCategory" $ tagsAndAuthors !! 1
                                      , authorField "postAuthor" $ tagsAndAuthors !! 2
                                      , defaultContext

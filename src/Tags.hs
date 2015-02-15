@@ -19,7 +19,7 @@ module Tags (
 ) where
 
 import Data.Monoid          (mconcat)
-import Data.List            (intercalate, isInfixOf)
+import Data.List            (intersperse, isInfixOf)
 import Network.HTTP         (urlEncode)
 import Context              (postContext)
 import Misc                 (TagsReader,
@@ -52,45 +52,21 @@ buildPostsAuthors = buildTagsWith getNameOfAuthor "posts/**" $ fromCapture "auth
 -- Функция отрисовывает тег-ссылку вместе со значком, отражающим количество публикаций,
 -- соответствующих данному тегу. Например, количество статей данного автора.
 -- За основу взяты исходники Hakyll.
-createTagLinkWithBadge :: Double
-                       -> Double
+createTagLinkWithBadge :: Double 
+                       -> Double 
                        -> String
                        -> String
-                       -> Int
+                       -> Int 
                        -> Int
                        -> Int
                        -> String
-createTagLinkWithBadge = createGenericTagLinkWithBadge id
-
--- Отрисовываем тег для категории, с заменой родного английского названия русским аналогом.
-createRussianTagLinkWithBadge :: Double
-                              -> Double
-                              -> String
-                              -> String
-                              -> Int
-                              -> Int
-                              -> Int
-                              -> String
-createRussianTagLinkWithBadge = createGenericTagLinkWithBadge getRussianNameOfCategory
-
-createGenericTagLinkWithBadge :: (String -> String)
-                              -> Double
-                              -> Double
-                              -> String
-                              -> String
-                              -> Int
-                              -> Int
-                              -> Int
-                              -> String
-{-# INLINE createGenericTagLinkWithBadge #-}
-createGenericTagLinkWithBadge convert
-                              smallestFontSizeInPercent
-                              biggestFontSizeInPercent
-                              tag
-                              url
-                              count
-                              min'
-                              max' =
+createTagLinkWithBadge smallestFontSizeInPercent 
+                       biggestFontSizeInPercent
+                       tag
+                       url
+                       count
+                       min'
+                       max' = 
     let diff     = 1 + fromIntegral max' - fromIntegral min'
         relative = (fromIntegral count - fromIntegral min') / diff
         size     = floor $ smallestFontSizeInPercent + relative * (biggestFontSizeInPercent - smallestFontSizeInPercent) :: Int
@@ -98,9 +74,37 @@ createGenericTagLinkWithBadge convert
         -- Формируем стандартный тег <a href...>
         H.a ! A.style (toValue $ "font-size: " ++ show size ++ "%")
             ! A.href (toValue url)
-            $ H.preEscapedToHtml $ convert tag
-                                   ++ "<span class=\"badge-for-tag-link\">"
-                                   ++ show count
+            $ H.preEscapedToHtml $ tag 
+                                   ++ "<span class=\"badge-for-tag-link\">" 
+                                   ++ (show count) 
+                                   ++ "</span>"
+
+-- Отрисовываем тег для категории, с заменой родного английского названия русским аналогом.
+createRussianTagLinkWithBadge :: Double 
+                              -> Double 
+                              -> String
+                              -> String
+                              -> Int 
+                              -> Int
+                              -> Int
+                              -> String
+createRussianTagLinkWithBadge smallestFontSizeInPercent 
+                              biggestFontSizeInPercent
+                              tag
+                              url
+                              count
+                              min'
+                              max' = 
+    let diff     = 1 + fromIntegral max' - fromIntegral min'
+        relative = (fromIntegral count - fromIntegral min') / diff
+        size     = floor $ smallestFontSizeInPercent + relative * (biggestFontSizeInPercent - smallestFontSizeInPercent) :: Int
+    in renderHtml $
+        -- Формируем стандартный тег <a href...>
+        H.a ! A.style (toValue $ "font-size: " ++ show size ++ "%")
+            ! A.href (toValue url)
+            $ H.preEscapedToHtml $ (getRussianNameOfCategory tag) 
+                                   ++ "<span class=\"badge-for-tag-link\">" 
+                                   ++ (show count) 
                                    ++ "</span>"
 
 -- Отрисовываем облако с тегами-ссылками, имеющими количественные значки.
@@ -112,9 +116,9 @@ renderTagCloudWithBadges :: Double
 renderTagCloudWithBadges smallestFontSizeInPercent
                          biggestFontSizeInPercent
                          specificTags
-                         thisIsCategoriesCloud =
-    let tagLinkRenderer = if thisIsCategoriesCloud
-                          then createRussianTagLinkWithBadge
+                         thisIsCategoriesCloud =    
+    let tagLinkRenderer = if thisIsCategoriesCloud 
+                          then createRussianTagLinkWithBadge 
                           else createTagLinkWithBadge
     in
     renderTagCloudWith tagLinkRenderer
@@ -122,36 +126,36 @@ renderTagCloudWithBadges smallestFontSizeInPercent
                        smallestFontSizeInPercent
                        biggestFontSizeInPercent
                        specificTags
-    where concatenateLinksWithSpaces = intercalate ", "
+    where concatenateLinksWithSpaces = concat . intersperse ", "
 
 -- Вспомогательная функция, формирующая страницу с облаком определённых тегов.
-createPageWithTagsCloud :: Tags
+createPageWithTagsCloud :: Tags 
                         -> Identifier
                         -> Double
                         -> Double
-                        -> String
+                        -> String 
                         -> String
                         -> Identifier
                         -> Rules ()
-createPageWithTagsCloud specificTags
-                        pageWithSpecificTags
-                        smallestFontSizeInPercent
-                        biggestFontSizeInPercent
-                        pageTitle
-                        cloudName
-                        specificTemplate =
+createPageWithTagsCloud specificTags 
+                        pageWithSpecificTags 
+                        smallestFontSizeInPercent 
+                        biggestFontSizeInPercent 
+                        pageTitle 
+                        cloudName 
+                        specificTemplate = 
     create [pageWithSpecificTags] $ do
         route idRoute
         compile $ do
-            let renderedCloud _ = renderTagCloudWithBadges smallestFontSizeInPercent
-                                                           biggestFontSizeInPercent
-                                                           specificTags
-                                                           ("Категории" `isInfixOf` pageTitle)
-                tagsContext = mconcat [ constField "title" pageTitle
+            let renderedCloud = \_ -> renderTagCloudWithBadges smallestFontSizeInPercent 
+                                                               biggestFontSizeInPercent
+                                                               specificTags
+                                                               ("Категории" `isInfixOf` pageTitle)
+                tagsContext = mconcat [ constField "title" pageTitle 
                                       , field cloudName renderedCloud
                                       , defaultContext
                                       ]
-
+            
             makeItem "" >>= loadAndApplyTemplate specificTemplate tagsContext
                         >>= loadAndApplyTemplate "templates/default.html" tagsContext
                         >>= relativizeUrls
@@ -160,10 +164,10 @@ createPageWithTagsCloud specificTags
 createPageWithAllTags :: TagsReader
 createPageWithAllTags = do
     tagsAndAuthors <- ask
-    lift $ createPageWithTagsCloud (head tagsAndAuthors)
-                                   "tags.html"
-                                   110
-                                   220
+    lift $ createPageWithTagsCloud (tagsAndAuthors !! 0) 
+                                   "tags.html" 
+                                   110 
+                                   220 
                                    "Темы публикаций"
                                    "tagsCloud"
                                    "templates/tags.html"
@@ -173,12 +177,12 @@ createPageWithAllTags = do
 createPageWithAllCategories :: TagsReader
 createPageWithAllCategories = do
     tagsAndAuthors <- ask
-    lift $ createPageWithTagsCloud (tagsAndAuthors !! 1)
-                                   "categories.html"
-                                   110
-                                   220
-                                   "Категории публикаций"
-                                   "categoriesCloud"
+    lift $ createPageWithTagsCloud (tagsAndAuthors !! 1) 
+                                   "categories.html" 
+                                   110 
+                                   220 
+                                   "Категории публикаций" 
+                                   "categoriesCloud" 
                                    "templates/categories.html"
     return ()
 
@@ -186,23 +190,23 @@ createPageWithAllCategories = do
 createPageWithAllAuthors :: TagsReader
 createPageWithAllAuthors = do
     tagsAndAuthors <- ask
-    lift $ createPageWithTagsCloud (tagsAndAuthors !! 2)
-                                   "authors.html"
-                                   110
-                                   220
-                                   "Наши авторы"
-                                   "authorsCloud"
+    lift $ createPageWithTagsCloud (tagsAndAuthors !! 2) 
+                                   "authors.html" 
+                                   110 
+                                   220 
+                                   "Наши авторы" 
+                                   "authorsCloud" 
                                    "templates/authors.html"
     return ()
 
-convertSpecificTagsToLinks :: TagsAndAuthors
-                           -> Tags
-                           -> String
+convertSpecificTagsToLinks :: TagsAndAuthors 
+                           -> Tags 
+                           -> String 
                            -> Rules ()
-convertSpecificTagsToLinks tagsAndAuthors specificTags aTitle =
+convertSpecificTagsToLinks tagsAndAuthors specificTags aTitle = 
     tagsRules specificTags $ \tag pattern -> do
         let nameOfTag = if "категории" `isInfixOf` aTitle then getRussianNameOfCategory tag else tag
-            title = renderHtml $ H.preEscapedToHtml $ aTitle ++ " " ++ nameOfTag
+            title = renderHtml $ H.preEscapedToHtml $ aTitle ++ " <span class=\"tag-in-title\">" ++ nameOfTag ++ "</span>"
         route idRoute
         compile $ do
             posts <- recentFirst =<< loadAll pattern
@@ -211,7 +215,7 @@ convertSpecificTagsToLinks tagsAndAuthors specificTags aTitle =
                                              , defaultContext
                                              ]
 
-            makeItem "" >>= loadAndApplyTemplate "templates/posts.html" taggedPostsContext
+            makeItem "" >>= loadAndApplyTemplate "templates/posts.html" taggedPostsContext 
                         >>= loadAndApplyTemplate "templates/default.html" taggedPostsContext
                         >>= relativizeUrls
 
@@ -219,8 +223,8 @@ convertSpecificTagsToLinks tagsAndAuthors specificTags aTitle =
 convertTagsToLinks :: TagsReader
 convertTagsToLinks = do
     tagsAndAuthors <- ask
-    lift $ convertSpecificTagsToLinks tagsAndAuthors
-                                      (head tagsAndAuthors)
+    lift $ convertSpecificTagsToLinks tagsAndAuthors 
+                                      (tagsAndAuthors !! 0)
                                       "Все статьи по теме"
     return ()
 
@@ -228,7 +232,7 @@ convertTagsToLinks = do
 convertCategoriesToLinks :: TagsReader
 convertCategoriesToLinks = do
     tagsAndAuthors <- ask
-    lift $ convertSpecificTagsToLinks tagsAndAuthors
+    lift $ convertSpecificTagsToLinks tagsAndAuthors 
                                       (tagsAndAuthors !! 1)
                                       "Все статьи в категории"
     return ()
@@ -237,7 +241,7 @@ convertCategoriesToLinks = do
 convertAuthorsToLinks :: TagsReader
 convertAuthorsToLinks = do
     tagsAndAuthors <- ask
-    lift $ convertSpecificTagsToLinks tagsAndAuthors
+    lift $ convertSpecificTagsToLinks tagsAndAuthors 
                                       (tagsAndAuthors !! 2)
                                       "Все статьи автора"
     return ()

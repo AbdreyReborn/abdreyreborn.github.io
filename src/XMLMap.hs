@@ -12,7 +12,8 @@ module XMLMap (
 
 import Data.Monoid          (mconcat)
 import Context              (postContext)
-import Misc                 (aHost, TagsReader)
+import Misc                 (aHost)
+import Misc                 (TagsReader)
 import Control.Monad.Reader
 import Hakyll
 

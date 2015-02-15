@@ -25,7 +25,6 @@ import Archive              (createPageWithAllPosts)
 import Misc                 (prepareAllTemplates)
 import IndexPage            (createIndexPage)
 import Links                (createPageWithExternalLinks)
-import MailingList          (createMailingListFrontend)
 import Control.Monad.Reader (runReaderT)
 import Hakyll
 
@@ -56,6 +55,5 @@ main = hakyll $ do
                 >> createXMLMap
                 >> setupRSSFeed
                 >> createIndexPage
-		>> createMailingListFrontend
                 >> createPageWithExternalLinks) [tags, categories, authors]
 

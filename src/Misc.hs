@@ -36,8 +36,11 @@ getNameOfAuthor :: MonadMetadata m => Identifier -> m [String]
 getNameOfAuthor identifier = do
     -- Собираем атрибуты статьи в обычный ассоциативный контейнер.
     metadata <- getMetadata identifier
-    let author = M.findWithDefault "Не указан" "author" metadata
-    return [trim author]
+    let maybeAuthor = M.lookup "author" metadata
+    return $ case maybeAuthor of
+        -- Поразумевается, что у статьи всегда один автор, а не несколько.
+        Nothing -> ["Не указан"]
+        Just nameOfAuthor -> [trim nameOfAuthor]
 
 -- Имена категорий извлекаются из файлового пути, поэтому они всегда английские.
 -- Это не красиво, поэтому мы формируем словарь русских имён для категорий.
@@ -45,15 +48,11 @@ russianNamesOfCategories :: M.Map String String
 russianNamesOfCategories = M.fromList[ ("web",      "Веб")
                                      , ("tasks",    "Задачи")
                                      , ("projects", "Проекты")
-                                     , ("utils",    "Утилиты")
-                                     , ("theory",   "Теория")
-                                     , ("dynamic",  "Динамика")
-                                     , ("packages", "Пакеты")
-                                     , ("elm",      "Elm")
-                                     , ("frp",      "FRP")
-                                     , ("gui",      "GUI")
-                                     , ("typesystem", "Система типов")
                                      ]
 
 getRussianNameOfCategory :: String -> String
-getRussianNameOfCategory englishName = M.findWithDefault englishName englishName russianNamesOfCategories
+getRussianNameOfCategory englishName = 
+    case (M.lookup englishName russianNamesOfCategories) of
+        Nothing   -> englishName
+        Just name -> name
+
